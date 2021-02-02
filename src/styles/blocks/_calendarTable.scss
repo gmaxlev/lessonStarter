@@ -1,0 +1,51 @@
+@keyframes calendar-table-item-show {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.calendarTable {
+  margin: 0 auto;
+
+  tr {
+    border: 1px solid #d7d7d7;
+
+    & > td {
+      border-right: 1px solid #d7d7d7;
+      width: 34px;
+      height: 64px;
+      vertical-align: middle;
+      text-align: center;
+
+      &.calendarTable__dayOff {
+        background-color: #f0f0f0;
+      }
+
+      & > span {
+        display: block;
+        animation: calendar-table-item-show var(--transition-time);
+
+        &:first-child {
+          font-size: 12px;
+          line-height: 18px;
+        }
+
+        &:last-child {
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 21px;
+        }
+      }
+
+      &:last-child {
+        border-right: 0;
+      }
+    }
+  }
+}

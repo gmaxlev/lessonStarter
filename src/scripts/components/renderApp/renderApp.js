@@ -1,11 +1,13 @@
 import renderBar from "../renderBar";
 import renderCalendar from "../renderCalendar";
+import store from "../../store";
 
 const renderApp = () => {
   const appElement = document.getElementById("appRoot");
-  const currentDate = new Date();
-  renderCalendar({ appElement, currentDate });
-  renderBar({ appElement, currentDate });
+  renderCalendar({ appElement, store });
+  renderBar({ appElement, store });
 };
+
+store.subscribe(renderApp);
 
 export default renderApp;

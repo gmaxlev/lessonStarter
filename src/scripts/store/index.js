@@ -2,6 +2,7 @@ const store = () => {
   const listeners = [];
 
   let activePeriod = new Date();
+  let tasks = [];
 
   return {
     getActivePeriod() {

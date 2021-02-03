@@ -1,9 +1,3 @@
-/**
- * Creates and returns HTML button element of navigation
- * @param {('prev','next')} direction
- * @param {Function} onClick Click event handler
- * @returns {HTMLButtonElement}
- */
 const renderNavButton = (direction, onClick) => {
   const component = document.createElement("button");
   component.classList.add("calendarBar__nav", direction === "prev" ? "calendarBar__nav_prev" : "calendarBar__nav_next");
@@ -11,11 +5,6 @@ const renderNavButton = (direction, onClick) => {
   return component;
 };
 
-/**
- * Creates or updates navbar of calendar
- * @param {HTMLElement} appElement Root app element
- * @param {Object} store Store
- */
 const renderBar = ({ appElement, store }) => {
   const activePeriod = store.getActivePeriod();
 

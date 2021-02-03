@@ -3,6 +3,7 @@ const store = () => {
 
   let activePeriod = new Date();
   let tasks = [];
+  console.log('/')
 
   return {
     getActivePeriod() {

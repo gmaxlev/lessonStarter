@@ -14,6 +14,7 @@ function store() {
       return {
         fullYear: activePeriod.getFullYear(),
         monthName: activePeriod.toLocaleDateString("en-US", { month: "long" }),
+        monthNumber: activePeriod.getMonth(),
       };
     },
     nextMonth() {

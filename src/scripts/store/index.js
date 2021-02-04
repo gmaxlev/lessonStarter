@@ -112,5 +112,3 @@ function store() {
 }
 
 export default store();
-
-console.log('hi');

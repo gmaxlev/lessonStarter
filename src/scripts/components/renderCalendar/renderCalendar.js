@@ -53,18 +53,19 @@ const renderCalendar = ({appElement, store }) => {
 
   if (calendarDataResponce !== null) {
     calendarDataResponce.teams.forEach((item) => {
+
       const calendarBodyTr = document.createElement("tr");
-      calendarBodyTr.append(renderTableRow(item));
+      calendarBody.append(calendarBodyTr);
+      calendarBodyTr.append(renderTableRow({name: item.name, sumTimers: item.members.length}));
       dates.forEach((item) => {
-        calendarBodyTr.append(renderTableRow(item));
+        calendarBodyTr.append(renderTableRow({isDayOff: item.isDayOff}));
       });
       item.members.forEach((item) => {
         const calendarBodyTr = document.createElement("tr");
         calendarBody.append(calendarBodyTr);
-        calendarBodyTr.append(renderTableRow(item));
+        calendarBodyTr.append(renderTableRow({name: item.name}));
         dates.forEach((item) => {
-          console.log(item);
-          calendarBodyTr.append(renderTableRow(item));
+          calendarBodyTr.append(renderTableRow({isDayOff: item.isDayOff}));
         });
       });
     });

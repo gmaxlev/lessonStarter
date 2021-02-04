@@ -11,7 +11,7 @@ const renderItemCalendar = (dayName, dayNumber, isDayOff) => {
   return component;
 };
 
-const renderTableNameRow = (name) => {
+const renderTableRow = (name) => {
   const component = document.createElement("td");
   const rowName = document.createElement("span");
   if (name !== undefined) {
@@ -33,6 +33,9 @@ const renderCalendar = ({
   const calendarHead = document.createElement("thead");
   const calendarBody = document.createElement("tbody");
   const calendarHeadTr = document.createElement("tr");
+  const addVocationBtn = document.createElement("button");
+  addVocationBtn.innerHTML = "Add Vacation";
+  calendarHeadTr.append(addVocationBtn);
 
   const dates = store.getDaysOfActivePeriod();
   dates.forEach((item) => {
@@ -51,16 +54,16 @@ const renderCalendar = ({
   teams.forEach((item) => {
     const calendarBodyTr = document.createElement("tr");
     calendarBody.append(calendarBodyTr);
-    calendarBodyTr.append(renderTableNameRow(item.name));
+    calendarBodyTr.append(renderTableRow(item.name));
     dates.forEach((item) => {
-      calendarBodyTr.append(renderTableNameRow());
+      calendarBodyTr.append(renderTableRow());
     });
     item.members.forEach((item) => {
       const calendarBodyTr = document.createElement("tr");
       calendarBody.append(calendarBodyTr);
-      calendarBodyTr.append(renderTableNameRow(item.name));
+      calendarBodyTr.append(renderTableRow(item.name));
       dates.forEach((item) => {
-        calendarBodyTr.append(renderTableNameRow());
+        calendarBodyTr.append(renderTableRow());
       });
     });
   });

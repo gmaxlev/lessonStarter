@@ -1,15 +1,3 @@
-@keyframes calendar-table-item-show {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .calendarTable {
   margin: 0 auto;
 
@@ -29,7 +17,6 @@
 
       & > span {
         display: block;
-        animation: calendar-table-item-show var(--transition-time);
 
         &:first-child {
           font-size: 12px;

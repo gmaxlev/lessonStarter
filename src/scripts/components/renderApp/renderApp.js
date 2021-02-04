@@ -10,4 +10,6 @@ const renderApp = () => {
 
 store.subscribe(renderApp);
 
+window.addEventListener("load", () => store.dispatch(store.fetchCalendar));
+
 export default renderApp;

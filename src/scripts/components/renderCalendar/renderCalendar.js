@@ -25,9 +25,18 @@ const renderCalendar = ({ appElement, store }) => {
     calendarHeadTr.append(renderItemCalendar(item.dayName, item.date, item.isDayOff));
   });
 
+  const calendar = store.getCalendar();
+  const testComponent = document.createElement("div");
+  if (calendar !== null) {
+    testComponent.innerText = "Loaded";
+  } else {
+    testComponent.innerText = "Loading";
+  }
+
   calendarHead.append(calendarHeadTr);
   calendarTableRoot.prepend(calendarHead);
   componentRoot.append(calendarTableRoot);
+  componentRoot.append(testComponent);
 
   const componentRootCheck = document.getElementById("calendar");
   if (componentRootCheck === null) {

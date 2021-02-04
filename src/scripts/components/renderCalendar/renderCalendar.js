@@ -1,6 +1,6 @@
 import teamIcon from "../../../images/team.svg";
 
-const renderItemCalendar = ({ dayName, dayNumber, isDayOff }) => {
+const renderHeadItem = ({ dayName, dayNumber, isDayOff }) => {
   const component = document.createElement("td");
   const monthName = document.createElement("span");
   const monthNumber = document.createElement("span");
@@ -13,37 +13,37 @@ const renderItemCalendar = ({ dayName, dayNumber, isDayOff }) => {
   return component;
 };
 
-const renderTableRow = ({ name, sumTimers, isDayOff, percentageOfAbsent }) => {
+const renderTableRow = ({ name, sumMembers, isDayOff, percentageOfAbsent }) => {
   const component = document.createElement("td");
   const componentContent = document.createElement("div");
   component.append(componentContent);
 
   if (name !== undefined) {
-    const row = document.createElement("span");
-    row.classList.add("calendarTable__team-name");
-    row.innerHTML = name;
-    componentContent.append(row);
+    const nameElement = document.createElement("span");
+    nameElement.classList.add("calendarTable__team-name");
+    nameElement.innerHTML = name;
+    componentContent.append(nameElement);
   }
-  if (sumTimers !== undefined) {
-    const numberOfTimers = document.createElement("span");
-    numberOfTimers.classList.add("calendarTable__team-count");
+  if (sumMembers !== undefined) {
+    const sumMembersElement = document.createElement("span");
+    sumMembersElement.classList.add("calendarTable__team-count");
     const numberOfTimersIcon = document.createElement("img");
     numberOfTimersIcon.setAttribute("src", teamIcon);
     const numberOfTimersText = document.createElement("span");
-    numberOfTimersText.innerHTML = sumTimers;
-    numberOfTimers.append(numberOfTimersIcon, numberOfTimersText);
-    componentContent.append(numberOfTimers);
-  }
-
-  if (name !== undefined || sumTimers !== undefined) {
-    componentContent.classList.add("calendarTable__team-title");
+    numberOfTimersText.innerHTML = sumMembers;
+    sumMembersElement.append(numberOfTimersIcon, numberOfTimersText);
+    componentContent.append(sumMembersElement);
   }
 
   if (percentageOfAbsent !== undefined) {
-    const percentage = document.createElement("span");
-    percentage.classList.add("calendarTable__percentage");
-    percentage.innerHTML = percentageOfAbsent;
-    componentContent.append(percentage);
+    const percentageElement = document.createElement("span");
+    percentageElement.classList.add("calendarTable__percentage");
+    percentageElement.innerHTML = percentageOfAbsent;
+    componentContent.append(percentageElement);
+  }
+
+  if (name !== undefined || sumMembers !== undefined) {
+    componentContent.classList.add("calendarTable__team-title");
   }
 
   if (isDayOff) {
@@ -71,11 +71,11 @@ const renderCalendar = ({ appElement, store }) => {
 
   const dates = store.getDaysOfActivePeriod();
   dates.forEach((item) => {
-    calendarHeadTr.append(renderItemCalendar({ dayName: item.dayName, dayNumber: item.date, isDayOff: item.isDayOff }));
+    calendarHeadTr.append(renderHeadItem({ dayName: item.dayName, dayNumber: item.date, isDayOff: item.isDayOff }));
   });
 
   const calendar = store.getCalendar();
-  const testComponent = document.createElement("div");
+  const preloaderElement = document.createElement("div");
 
   if (calendar !== null) {
     calendar.teams.forEach((item, index, array) => {
@@ -83,7 +83,11 @@ const renderCalendar = ({ appElement, store }) => {
       calendarBodyTr.classList.add("calendarTable__team-header");
       calendarBody.append(calendarBodyTr);
       calendarBodyTr.append(
-        renderTableRow({ name: item.name, sumTimers: item.members.length, percentageOfAbsent: "333" }),
+        renderTableRow({
+          name: item.name,
+          sumMembers: item.members.length,
+          percentageOfAbsent: item.percentageOfAbsent[store.getActivePeriod().monthNumber],
+        }),
       );
       dates.forEach((item) => {
         calendarBodyTr.append(renderTableRow({ isDayOff: item.isDayOff }));
@@ -106,14 +110,14 @@ const renderCalendar = ({ appElement, store }) => {
       }
     });
   } else {
-    testComponent.innerText = "Loading";
+    preloaderElement.innerText = "Loading";
   }
 
   calendarHead.append(calendarHeadTr);
   calendarTableRoot.prepend(calendarHead);
   calendarTableRoot.append(calendarBody);
   componentRoot.append(calendarTableRoot);
-  componentRoot.append(testComponent);
+  componentRoot.append(preloaderElement);
 
   const componentRootCheck = document.getElementById("calendar");
   if (componentRootCheck === null) {

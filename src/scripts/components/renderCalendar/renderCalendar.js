@@ -11,13 +11,27 @@ const renderItemCalendar = (dayName, dayNumber, isDayOff) => {
   return component;
 };
 
-const renderCalendar = ({ appElement, store }) => {
+const renderTableNameRow = (name) => {
+  const component = document.createElement("td");
+  const rowName = document.createElement("span");
+  if (name !== undefined) {
+    rowName.innerHTML = name;
+  };
+  component.append(rowName);
+  return component;
+};
+
+const renderCalendar = ({
+  appElement,
+  store
+}) => {
   const componentRoot = document.createElement("div");
   componentRoot.setAttribute("id", "calendar");
   componentRoot.classList.add("container");
   const calendarTableRoot = document.createElement("table");
   calendarTableRoot.classList.add("calendarTable");
   const calendarHead = document.createElement("thead");
+  const calendarBody = document.createElement("tbody");
   const calendarHeadTr = document.createElement("tr");
 
   const dates = store.getDaysOfActivePeriod();
@@ -33,8 +47,27 @@ const renderCalendar = ({ appElement, store }) => {
     testComponent.innerText = "Loading";
   }
 
+  const teams = calendar.teams;
+  teams.forEach((item) => {
+    const calendarBodyTr = document.createElement("tr");
+    calendarBody.append(calendarBodyTr);
+    calendarBodyTr.append(renderTableNameRow(item.name));
+    dates.forEach((item) => {
+      calendarBodyTr.append(renderTableNameRow());
+    });
+    item.members.forEach((item) => {
+      const calendarBodyTr = document.createElement("tr");
+      calendarBody.append(calendarBodyTr);
+      calendarBodyTr.append(renderTableNameRow(item.name));
+      dates.forEach((item) => {
+        calendarBodyTr.append(renderTableNameRow());
+      });
+    });
+  });
+
   calendarHead.append(calendarHeadTr);
   calendarTableRoot.prepend(calendarHead);
+  calendarTableRoot.append(calendarBody);
   componentRoot.append(calendarTableRoot);
   componentRoot.append(testComponent);
 

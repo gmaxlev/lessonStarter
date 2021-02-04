@@ -1,4 +1,4 @@
-const renderItemCalendar = (dayName, dayNumber, isDayOff) => {
+const renderItemCalendar = ({dayName, dayNumber, isDayOff}) => {
   const component = document.createElement("td");
   const monthName = document.createElement("span");
   const monthNumber = document.createElement("span");
@@ -11,10 +11,11 @@ const renderItemCalendar = (dayName, dayNumber, isDayOff) => {
   return component;
 };
 
-const renderTableRow = (name, sumTimers, isDayOff) => {
+const renderTableRow = ({name, sumTimers, isDayOff}) => {
   const component = document.createElement("td");
   const row = document.createElement("span");
   const numberOfTimers = document.createElement("span");
+
   if (name !== undefined) {
     row.innerHTML = name;
   };
@@ -29,10 +30,7 @@ const renderTableRow = (name, sumTimers, isDayOff) => {
   return component;
 };
 
-const renderCalendar = ({
-  appElement,
-  store
-}) => {
+const renderCalendar = ({appElement, store }) => {
   const componentRoot = document.createElement("div");
   componentRoot.setAttribute("id", "calendar");
   componentRoot.classList.add("container");
@@ -47,31 +45,31 @@ const renderCalendar = ({
 
   const dates = store.getDaysOfActivePeriod();
   dates.forEach((item) => {
-    calendarHeadTr.append(renderItemCalendar(item.dayName, item.date, item.isDayOff));
+    calendarHeadTr.append(renderItemCalendar(item));
   });
 
-  const calendar = store.getCalendar();
-  const testComponent = document.createElement("div");
+  const calendarDataResponce = store.getCalendarData();
+  const preloaderComponent = document.createElement("div");
 
-  if (calendar !== null) {
-    calendar.teams.forEach((item) => {
+  if (calendarDataResponce !== null) {
+    calendarDataResponce.teams.forEach((item) => {
       const calendarBodyTr = document.createElement("tr");
-      calendarBody.append(calendarBodyTr);
-      calendarBodyTr.append(renderTableRow(item.name, item.members.length));
+      calendarBodyTr.append(renderTableRow(item));
       dates.forEach((item) => {
-        calendarBodyTr.append(renderTableRow(undefined, undefined,item.isDayOff));
+        calendarBodyTr.append(renderTableRow(item));
       });
       item.members.forEach((item) => {
         const calendarBodyTr = document.createElement("tr");
         calendarBody.append(calendarBodyTr);
-        calendarBodyTr.append(renderTableRow(item.name));
+        calendarBodyTr.append(renderTableRow(item));
         dates.forEach((item) => {
-          calendarBodyTr.append(renderTableRow(undefined, undefined, item.isDayOff));
+          console.log(item);
+          calendarBodyTr.append(renderTableRow(item));
         });
       });
     });
   } else {
-    testComponent.innerText = "Loading";
+    preloaderComponent.innerText = "Loading";
   }
 
 
@@ -80,7 +78,7 @@ const renderCalendar = ({
   calendarTableRoot.prepend(calendarHead);
   calendarTableRoot.append(calendarBody);
   componentRoot.append(calendarTableRoot);
-  componentRoot.append(testComponent);
+  componentRoot.append(preloaderComponent);
 
   const componentRootCheck = document.getElementById("calendar");
   if (componentRootCheck === null) {

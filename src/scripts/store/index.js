@@ -7,7 +7,7 @@ function store() {
   };
 
   let activePeriod = new Date();
-  let calendar = null;
+  let calendarData = null;
 
   return {
     getActivePeriod() {
@@ -31,7 +31,7 @@ function store() {
         let item = new Date(date);
         days.push({
           dayName: item.toLocaleDateString("en-US", { weekday: "long" }),
-          date: item.getDate(),
+          dayNumber: item.getDate(),
           isDayOff: item.getDay() === 0 || item.getDay() === 6,
         });
         date.setDate(date.getDate() + 1);
@@ -92,11 +92,11 @@ function store() {
         },
       })
         .then((response) => response.json())
-        .then((json) => (calendar = json))
+        .then((json) => (calendarData = json))
         .catch((error) => alert(error));
     },
-    getCalendar() {
-      return calendar;
+    getCalendarData() {
+      return calendarData;
     },
     subscribe(listener) {
       listeners.push(listener);
@@ -112,3 +112,5 @@ function store() {
 }
 
 export default store();
+
+console.log('hi');

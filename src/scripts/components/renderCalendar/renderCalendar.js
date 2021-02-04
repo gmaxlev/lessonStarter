@@ -11,13 +11,21 @@ const renderItemCalendar = (dayName, dayNumber, isDayOff) => {
   return component;
 };
 
-const renderTableRow = (name) => {
+const renderTableRow = (name, sumTimers, isDayOff) => {
   const component = document.createElement("td");
-  const rowName = document.createElement("span");
+  const row = document.createElement("span");
+  const numberOfTimers = document.createElement("span");
   if (name !== undefined) {
-    rowName.innerHTML = name;
+    row.innerHTML = name;
   };
-  component.append(rowName);
+  if (sumTimers !== undefined) {
+    numberOfTimers.innerHTML = sumTimers;
+  };
+  component.append(row);
+  component.append(numberOfTimers);
+  if (isDayOff) {
+    component.classList.add("calendarTable__dayOff");
+  }
   return component;
 };
 
@@ -34,7 +42,7 @@ const renderCalendar = ({
   const calendarBody = document.createElement("tbody");
   const calendarHeadTr = document.createElement("tr");
   const addVocationBtn = document.createElement("button");
-  addVocationBtn.innerHTML = "Add Vacation";
+  addVocationBtn.innerHTML = "+ Add Vacation";
   calendarHeadTr.append(addVocationBtn);
 
   const dates = store.getDaysOfActivePeriod();
@@ -44,29 +52,29 @@ const renderCalendar = ({
 
   const calendar = store.getCalendar();
   const testComponent = document.createElement("div");
+
   if (calendar !== null) {
-    testComponent.innerText = "Loaded";
+    calendar.teams.forEach((item) => {
+      const calendarBodyTr = document.createElement("tr");
+      calendarBody.append(calendarBodyTr);
+      calendarBodyTr.append(renderTableRow(item.name, item.members.length));
+      dates.forEach((item) => {
+        calendarBodyTr.append(renderTableRow(undefined, undefined,item.isDayOff));
+      });
+      item.members.forEach((item) => {
+        const calendarBodyTr = document.createElement("tr");
+        calendarBody.append(calendarBodyTr);
+        calendarBodyTr.append(renderTableRow(item.name));
+        dates.forEach((item) => {
+          calendarBodyTr.append(renderTableRow(undefined, undefined, item.isDayOff));
+        });
+      });
+    });
   } else {
     testComponent.innerText = "Loading";
   }
 
-  const teams = calendar.teams;
-  teams.forEach((item) => {
-    const calendarBodyTr = document.createElement("tr");
-    calendarBody.append(calendarBodyTr);
-    calendarBodyTr.append(renderTableRow(item.name));
-    dates.forEach((item) => {
-      calendarBodyTr.append(renderTableRow());
-    });
-    item.members.forEach((item) => {
-      const calendarBodyTr = document.createElement("tr");
-      calendarBody.append(calendarBodyTr);
-      calendarBodyTr.append(renderTableRow(item.name));
-      dates.forEach((item) => {
-        calendarBodyTr.append(renderTableRow());
-      });
-    });
-  });
+
 
   calendarHead.append(calendarHeadTr);
   calendarTableRoot.prepend(calendarHead);

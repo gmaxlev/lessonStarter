@@ -17,17 +17,19 @@ const renderTableRow = (name, sumTimers, isDayOff) => {
   const numberOfTimers = document.createElement("span");
   if (name !== undefined) {
     row.innerHTML = name;
+    component.append(row);
   };
   if (sumTimers !== undefined) {
     numberOfTimers.innerHTML = sumTimers;
+    component.append(numberOfTimers);
   };
-  component.append(row);
-  component.append(numberOfTimers);
   if (isDayOff) {
     component.classList.add("calendarTable__dayOff");
   }
   return component;
 };
+
+// добавить спан третий
 
 const renderCalendar = ({
   appElement,
@@ -59,7 +61,7 @@ const renderCalendar = ({
       calendarBody.append(calendarBodyTr);
       calendarBodyTr.append(renderTableRow(item.name, item.members.length));
       dates.forEach((item) => {
-        calendarBodyTr.append(renderTableRow(undefined, undefined,item.isDayOff));
+        calendarBodyTr.append(renderTableRow(undefined, undefined, item.isDayOff));
       });
       item.members.forEach((item) => {
         const calendarBodyTr = document.createElement("tr");

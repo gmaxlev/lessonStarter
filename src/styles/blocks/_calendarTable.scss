@@ -30,6 +30,12 @@
   }
 
   tbody {
+    &::after {
+      content: "";
+      display: table-row;
+      height: 32px;
+    }
+
     td {
       height: 34px;
       min-height: 34px;
@@ -51,6 +57,18 @@
       &.calendarTable__dayOff {
         background-color: #f0f0f0;
       }
+    }
+  }
+
+  .frontend-team {
+    tr {
+      border-left: 3px  solid #9b99ff;
+    }
+  }
+
+  .backend-team {
+    tr {
+      border-left: 3px solid #f99;
     }
   }
 

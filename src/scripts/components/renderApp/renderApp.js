@@ -14,12 +14,12 @@ class Element {
   }
   render() {
     const element = document.createElement(this.tagName);
-    for (let attr in this.attrs) {
-      element.setAttribute(attr, this.attrs[attr]);
-    }
-    for (let event in this.events) {
-      element.addEventListener(event, this.attrs[event]);
-    }
+    Object.entries(this.attrs).forEach(([key, value]) => {
+      element.setAttribute(key, value);
+    });
+    Object.entries(this.events).forEach(([key, value]) => {
+      element.addEventListener(key, value);
+    });
     if (this.innerText !== undefined) {
       element.innerText = this.innerText;
     }

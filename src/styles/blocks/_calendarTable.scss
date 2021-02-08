@@ -30,6 +30,18 @@
   }
 
   tbody {
+    &::after {
+      content: "";
+      height: 41px;
+      display: table-row;
+    }
+
+    &:last-child {
+      &::after {
+        display: none;
+      }
+    }
+
     td {
       height: 34px;
       min-height: 34px;
@@ -46,6 +58,7 @@
 
       &:first-child {
         min-width: 260px;
+        border-left: 3px solid #9b99ff;
       }
 
       &.calendarTable__dayOff {
@@ -101,5 +114,19 @@
     width: 28px;
     margin-left: 13px;
     text-align: center;
+  }
+
+  &__team-toogle {
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    outline: none;
+    margin-left: 18px;
+    padding: 0;
+    transform: rotate(180deg);
+
+    &_open {
+      transform: rotate(0);
+    }
   }
 }

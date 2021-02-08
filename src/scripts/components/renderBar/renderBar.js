@@ -1,32 +1,24 @@
-const renderNavButton = (direction, onClick) => {
-  const component = document.createElement("button");
-  component.classList.add("calendarBar__nav", direction === "prev" ? "calendarBar__nav_prev" : "calendarBar__nav_next");
-  component.addEventListener("click", onClick);
-  return component;
-};
+import Component from "../Component";
+import Element from "../Element";
 
-const renderBar = ({ appElement, store }) => {
-  const activePeriod = store.getActivePeriod();
-
-  const calendarToolbar = document.createElement("div");
-  calendarToolbar.classList.add("calendarBar");
-  calendarToolbar.setAttribute("id", "bar");
-
-  const calendarToolbarCurrent = document.createElement("p");
-  calendarToolbarCurrent.classList.add("calendarBar__current");
-  calendarToolbarCurrent.innerText = `${activePeriod.monthName} ${activePeriod.fullYear}`;
-
-  calendarToolbar.append(renderNavButton("prev", () => store.dispatch(store.prevMonth)));
-  calendarToolbar.append(calendarToolbarCurrent);
-  calendarToolbar.append(renderNavButton("next", () => store.dispatch(store.nextMonth)));
-
-  const renderBarComponent = document.getElementById("bar");
-  if (renderBarComponent === null) {
-    appElement.prepend(calendarToolbar);
-  } else {
-    renderBarComponent.parentNode.insertBefore(calendarToolbar, renderBarComponent.nextSibling);
-    renderBarComponent.parentNode.removeChild(renderBarComponent);
+export default class NavigationComponent extends Component {
+  constructor(props) {
+    super(props);
   }
-};
-
-export default renderBar;
+  render() {
+    return new Element("div", { class: "calendarBar" }, [
+      new Element("button", { class: "calendarBar__nav calendarBar__nav_prev" }, [], "", {
+        click: this.props.prev,
+      }),
+      new Element(
+        "span",
+        { class: "calendarBar__current" },
+        [],
+        `${this.props.date.toLocaleDateString("en-US", { month: "long", year: "numeric" })}`,
+      ),
+      new Element("button", { class: "calendarBar__nav calendarBar__nav_next" }, [], "", {
+        click: this.props.next,
+      }),
+    ]);
+  }
+}

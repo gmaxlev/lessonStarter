@@ -1,19 +1,16 @@
 .calendarTable {
-  margin: 0 auto;
+  &__empty {
+    border: 0 !important;
 
-  tr {
-    border: 1px solid #d7d7d7;
+    td {
+      border: 0 !important;
+    }
+  }
 
-    & > td {
-      border-right: 1px solid #d7d7d7;
-      width: 34px;
+  thead {
+    td {
       height: 64px;
-      vertical-align: middle;
       text-align: center;
-
-      &.calendarTable__dayOff {
-        background-color: #f0f0f0;
-      }
 
       & > span {
         display: block;
@@ -29,10 +26,107 @@
           line-height: 21px;
         }
       }
+    }
+  }
 
-      &:last-child {
-        border-right: 0;
+  tbody {
+    &::after {
+      content: "";
+      height: 41px;
+      display: table-row;
+    }
+
+    &:last-child {
+      &::after {
+        display: none;
       }
+    }
+
+    td {
+      height: 34px;
+      min-height: 34px;
+      max-height: 34px;
+    }
+  }
+
+  tr {
+    & > td {
+      border: 1px solid #d7d7d7;
+      width: 34px;
+      min-width: 34px;
+      vertical-align: middle;
+
+      &:first-child {
+        min-width: 260px;
+        border-left: 3px solid #9b99ff;
+      }
+
+      &.calendarTable__dayOff {
+        background-color: #f0f0f0;
+      }
+    }
+  }
+
+  &__addVocation {
+    border: 0 !important;
+    text-align: left !important;
+  }
+
+  &__team-name {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  &__team-header {
+    background: rgba(155, 153, 255, 0.1);
+
+    .calendarTable__team-name {
+      font-weight: 600;
+    }
+  }
+
+  &__team-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  &__team-count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #949494;
+    margin-left: auto;
+
+    img {
+      margin-right: 3px;
+    }
+  }
+
+  &__percentage {
+    background: #9b99ff;
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: 18px;
+    color: #fff;
+    width: 28px;
+    margin-left: 13px;
+    text-align: center;
+  }
+
+  &__team-toogle {
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    outline: none;
+    margin-left: 18px;
+    padding: 0;
+    transform: rotate(180deg);
+
+    &_open {
+      transform: rotate(0);
     }
   }
 }

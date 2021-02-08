@@ -1,0 +1,28 @@
+.button {
+  cursor: pointer;
+  outline: none;
+}
+
+.button_a {
+  background: #48ba46;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 21px;
+  color: #fff;
+  border: 0;
+  padding: 9.5px 20px;
+  min-width: 144px;
+  transition: background-color var(--transition-time);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    margin-right: 10px;
+  }
+
+  &:hover {
+    background-color: darken(#48ba46, 10%);
+  }
+}

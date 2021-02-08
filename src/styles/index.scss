@@ -1,11 +1,10 @@
-html,
-body {
-  font-family: "Open Sans", sans-serif;
-  font-size: 14px;
-  line-height: 1.3em;
-}
+@import "vendor/reset";
+@import "variables";
+@import "global";
 
-.calendarBar {
-  display: flex;
-  justify-content: center;
-}
+// Blocks
+@import "blocks/calendarBar";
+@import "blocks/container";
+@import "blocks/calendarTable";
+@import "blocks/button";
+@import "blocks/loading";

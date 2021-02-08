@@ -1,0 +1,41 @@
+.calendarBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+  margin-top: 35px;
+}
+
+.calendarBar__current {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+  color: #000;
+  width: 180px;
+}
+
+.calendarBar__nav {
+  width: 30px;
+  height: 30px;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 0;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: transform var(--transition-time);
+
+  &:hover {
+    transform: scale(1.5);
+  }
+}
+
+.calendarBar__nav_next {
+  background-image: url(../images/next.svg);
+}
+
+.calendarBar__nav_prev {
+  background-image: url(../images/prev.svg);
+}

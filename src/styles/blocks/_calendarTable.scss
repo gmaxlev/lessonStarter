@@ -1,3 +1,13 @@
+@keyframes table-row-show {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .calendarTable {
   &__empty {
     border: 0 !important;
@@ -50,19 +60,18 @@
   }
 
   tr {
+    animation: table-row-show var(--transition-time);
+
     & > td {
       border: 1px solid #d7d7d7;
       width: 34px;
       min-width: 34px;
       vertical-align: middle;
+      animation: table-row-show var(--transition-time);
 
       &:first-child {
         min-width: 260px;
         border-left: 3px solid #9b99ff;
-      }
-
-      &.calendarTable__dayOff {
-        background-color: #f0f0f0;
       }
     }
   }
@@ -124,9 +133,27 @@
     margin-left: 18px;
     padding: 0;
     transform: rotate(180deg);
+    transition: transform var(--transition-time);
 
     &_open {
       transform: rotate(0);
+    }
+  }
+
+  &__dayOff {
+    background-color: #f0f0f0;
+  }
+
+  &__vacations {
+    background: #9b99ff;
+    border: 0 !important;
+
+    &:last-child {
+      border-right: 1px solid #9b99ff !important;
+    }
+
+    &:first-child {
+      border-right: 1px solid #9b99ff !important;
     }
   }
 }

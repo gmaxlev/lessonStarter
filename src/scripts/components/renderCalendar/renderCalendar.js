@@ -21,14 +21,16 @@ export default class TableComponent extends Component {
 
     const teamsGroups = [];
 
-    this.props.teams.teams.forEach((teamGroup) => {
-      teamsGroups.push(new TeamComponent({ teamGroup: teamGroup, allDays: this.props.allDays, date: this.props.date }));
+    this.props.teams.teams.forEach((teamGroup, index) => {
+      teamsGroups.push(
+        new Element(TeamComponent, { teamGroup: teamGroup, allDays: this.props.allDays, date: this.props.date }),
+      );
     });
 
     return new Element("table", { class: "calendarTable" }, [
       new Element("thead", {}, [
         new Element("tr", {}, [
-          new Element("td", { class: "calendarTable__addVocation" }, [new Button({ text: "Add Vacation" })]),
+          new Element("td", { class: "calendarTable__addVocation" }, [new Element(Button, { text: "Add Vacation" })]),
           ...tableHeadCells,
         ]),
       ]),
@@ -42,26 +44,28 @@ class TeamComponent extends Component {
     super(props);
     this.isOpen = true;
   }
-  vacationsDays(vacation, date) {
+  checkVacationsDate(vacations, date) {
     let result = false;
-    vacation.forEach((item) => {
-      let startDate = item.startDate.split(".");
-      let newStartDate = [startDate[2],`${ +startDate[1] -1 }`,  startDate[0]];
-      let endDate = item.endDate.split(".");
-      let newEndDate = [endDate[2],`${ +endDate[1] -1 }`,  endDate[0]];
-      if (new Date(...newStartDate) <= date && new Date(...newEndDate) >= date)  {
+    vacations.forEach((item) => {
+      const startDateNumbers = item.startDate.split(".");
+      const startDate = `${startDateNumbers[2]}/${startDateNumbers[1]}/${startDateNumbers[0]}`;
+      const endDateNumbers = item.endDate.split(".");
+      const endDate = `${endDateNumbers[2]}/${endDateNumbers[1]}/${endDateNumbers[0]}`;
+      if (date >= new Date(startDate) && date <= new Date(endDate)) {
         result = true;
       }
     });
-    console.log(result);
     return result;
   }
-  membersDaysCells(vacation) {
+  memberRow(vacations) {
     return this.props.allDays.map((item) => {
-      return new Element("td", { class: `${item.isDayOff ? "calendarTable__dayOff" : ""} ${this.vacationsDays(vacation.vacations, item.fullDate) ? "calendarTable__vacations" : ""}`});
+      return new Element("td", {
+        class: `${item.isDayOff ? "calendarTable__dayOff" : ""} ${
+          this.checkVacationsDate(vacations, item.fullDate) ? "calendarTable__vacations" : ""
+        }`,
+      });
     });
   }
-
   render() {
     const daysCells = this.props.allDays.map((item) => {
       return new Element("td", { class: item.isDayOff ? "calendarTable__dayOff" : "" });
@@ -96,7 +100,7 @@ class TeamComponent extends Component {
               {
                 click: () => {
                   this.isOpen = !this.isOpen;
-                  this.mount();
+                  this.update();
                 },
               },
             ),
@@ -110,7 +114,7 @@ class TeamComponent extends Component {
         tableRows.push(
           new Element("tr", {}, [
             new Element("td", {}, [new Element("div", { class: "calendarTable__team-title" }, [], member.name)]),
-            ...this.membersDaysCells(member),
+            ...this.memberRow(member.vacations),
           ]),
         ),
       );

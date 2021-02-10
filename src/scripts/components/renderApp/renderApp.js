@@ -92,6 +92,7 @@ class AppComponent extends Component {
         dayName: item.toLocaleDateString("en-US", { weekday: "long" }),
         date: item.getDate(),
         isDayOff: item.getDay() === 0 || item.getDay() === 6,
+        currentCellDate: item,
       });
       date.setDate(date.getDate() + 1);
     }

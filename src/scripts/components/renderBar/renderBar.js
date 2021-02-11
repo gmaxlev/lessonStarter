@@ -2,8 +2,9 @@ import Component from "../Component";
 import Element from "../Element";
 
 export default class NavigationComponent extends Component {
-  constructor(props) {
-    super(props);
+  // eslint-disable-next-line no-useless-constructor
+  constructor(properties) {
+    super(properties);
   }
   render() {
     return new Element("div", { class: "calendarBar" }, [

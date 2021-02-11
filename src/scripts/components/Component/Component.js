@@ -1,64 +1,72 @@
-import Element from "../Element";
 export default class Component {
-  constructor(props) {
-    this.props = props;
-    this.__VDOM = null;
-    this.__parentSelector = null;
-    this.__positionElementInParen = 0;
+  constructor(properties) {
+    this.props = properties;
+    this.virtualDom = null;
+    this.parentSelector = null;
+    this.positionElementInParen = 0;
   }
   setParentSelector(parent) {
-    this.__parentSelector = parent;
+    this.parentSelector = parent;
   }
+
   setPositionElementInParent(index) {
-    this.__positionElementInParen = index;
+    this.positionElementInParen = index;
   }
-  rerender(rootElement, currNode, nextNode, index = 0) {
-    debugger;
+  // eslint-disable-next-line consistent-return
+  rerender(rootElement, currentNode, nextNode, index = 0) {
     if (!nextNode) {
-      if (index >= rootElement.children.length) {
-        return rootElement.removeChild(rootElement.lastChild);
-      } else {
-        return rootElement.removeChild(rootElement.childNodes[index]);
-      }
+      return index >= rootElement.children.length
+        ? rootElement.lastChild.remove()
+        : rootElement.childNodes[index].remove();
     }
 
-    if (!currNode) {
+    if (!currentNode) {
       if (typeof nextNode.type === "string") {
-        rootElement.appendChild(nextNode.render());
+        if (rootElement.childNodes[index]) {
+          rootElement.replaceChild(nextNode.render(), rootElement.childNodes[index]);
+        } else {
+          rootElement.append(nextNode.render());
+        }
       } else {
+        // eslint-disable-next-line new-cap
         const component = new nextNode.type(nextNode.attrs);
+        // eslint-disable-next-line no-param-reassign
         nextNode.component = component;
         component.setParentSelector(rootElement);
         component.setPositionElementInParent(rootElement.children.length);
         component.update();
       }
-      for (let i = 0; i < nextNode.children.length; i++) {
-        this.rerender(rootElement.childNodes[index], null, nextNode.children[i], i);
+      for (let indexChild = 0; indexChild < nextNode.children.length; indexChild++) {
+        this.rerender(rootElement.childNodes[index], null, nextNode.children[indexChild], indexChild);
       }
+      // eslint-disable-next-line consistent-return
       return;
     }
 
-    if (this.changed(currNode, nextNode)) {
+    if (Component.changed(currentNode, nextNode)) {
       if (typeof nextNode.type === "string") {
         const replace = nextNode.render();
         rootElement.replaceChild(replace, rootElement.childNodes[index]);
 
-        for (let i = 0; i < nextNode.children.length; i++) {
-          this.rerender(rootElement.childNodes[index], null, nextNode.children[i], i);
+        for (let indexChild = 0; indexChild < nextNode.children.length; indexChild++) {
+          this.rerender(rootElement.childNodes[index], null, nextNode.children[indexChild], indexChild);
         }
       } else if (typeof nextNode.type === "function") {
+        // eslint-disable-next-line new-cap
         const component = new nextNode.type(nextNode.attrs);
-        component.setParentSelector(rootElement.childNodes[index]);
+        component.setParentSelector(rootElement);
+        component.setPositionElementInParent(index);
         component.update();
       }
     } else {
-      if (typeof currNode.type === "string" && typeof nextNode.type === "string") {
-        if (currNode.innerText !== nextNode.innerText) {
-          rootElement.childNodes[index].innerText = nextNode.innerText;
+      if (typeof currentNode.type === "string" && typeof nextNode.type === "string") {
+        if (currentNode.textContent !== nextNode.textContent) {
+          // eslint-disable-next-line no-param-reassign
+          rootElement.childNodes[index].textContent = nextNode.textContent;
         }
-        const mergedProps = { ...currNode.attrs, ...nextNode.attrs };
-        Object.keys(mergedProps).forEach((key) => {
-          if (currNode.attrs[key] !== nextNode.attrs[key]) {
+        const mergedProperties = { ...currentNode.attrs, ...nextNode.attrs };
+        Object.keys(mergedProperties).forEach((key) => {
+          if (currentNode.attrs[key] !== nextNode.attrs[key]) {
             if (nextNode.attrs[key] == null || nextNode.attrs[key] === false || nextNode.attrs[key].trim() === "") {
               rootElement.childNodes[index].removeAttribute(key);
             } else {
@@ -66,35 +74,46 @@ export default class Component {
             }
           }
         });
-      } else if (typeof currNode.type === "function" && typeof nextNode.type === "function") {
-        nextNode.component = currNode.component;
-        const mergedProps = { ...currNode.attrs, ...nextNode.attrs };
+      } else if (typeof currentNode.type === "function" && typeof nextNode.type === "function") {
+        // eslint-disable-next-line no-param-reassign
+        nextNode.component = currentNode.component;
+        const mergedProperties = { ...currentNode.attrs, ...nextNode.attrs };
         let status = false;
-        Object.keys(mergedProps).forEach((key) => {
-          if (currNode.attrs[key] !== nextNode.attrs[key]) {
+        Object.keys(mergedProperties).forEach((key) => {
+          if (currentNode.attrs[key] !== nextNode.attrs[key]) {
             status = true;
           }
         });
         if (status) {
-          currNode.component.update(mergedProps);
+          currentNode.component.update(mergedProperties);
         }
       }
-      for (let i = 0; i < Math.max(currNode.children.length, nextNode.children.length); i++) {
-        this.rerender(rootElement.childNodes[index], currNode.children[i], nextNode.children[i], i);
+      for (
+        let indexChild = 0;
+        indexChild < Math.max(currentNode.children.length, nextNode.children.length);
+        indexChild++
+      ) {
+        this.rerender(
+          rootElement.childNodes[index],
+          currentNode.children[indexChild],
+          nextNode.children[indexChild],
+          indexChild,
+        );
       }
     }
   }
-  changed(nodeA, nodeB) {
+  // eslint-disable-next-line consistent-return
+  static changed(nodeA, nodeB) {
     if (nodeA.type !== nodeB.type) {
       return true;
     }
   }
-  update(newProps) {
-    if (newProps) {
-      this.props = newProps;
+  update(newProperties) {
+    if (newProperties) {
+      this.props = newProperties;
     }
-    const __VDOM = this.render();
-    this.rerender(this.__parentSelector, this.__VDOM, __VDOM, this.__positionElementInParen);
-    this.__VDOM = __VDOM;
+    const virtualDom = this.render();
+    this.rerender(this.parentSelector, this.virtualDom, virtualDom, this.positionElementInParen);
+    this.virtualDom = virtualDom;
   }
 }

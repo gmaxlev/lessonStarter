@@ -1,9 +1,9 @@
 export default class Element {
-  constructor(type = "div", attrs = {}, children = [], innerText = "", events = {}) {
+  constructor(type = "div", attributes = {}, children = [], innerText = "", events = {}) {
     this.type = type;
-    this.attrs = attrs;
+    this.attrs = attributes;
     this.children = children;
-    this.innerText = innerText;
+    this.textContent = innerText;
     this.events = events;
     this.component = null;
   }
@@ -20,8 +20,8 @@ export default class Element {
     Object.entries(this.events).forEach(([key, value]) => {
       element.addEventListener(key, value);
     });
-    if (this.innerText !== undefined) {
-      element.innerText = this.innerText;
+    if (this.textContent !== undefined) {
+      element.textContent = this.textContent;
     }
     return element;
   }

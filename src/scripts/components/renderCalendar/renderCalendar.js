@@ -22,13 +22,15 @@ export default class TableComponent extends Component {
     const teamsGroups = [];
 
     this.props.teams.teams.forEach((teamGroup, index) => {
-      teamsGroups.push(new TeamComponent({ teamGroup: teamGroup, allDays: this.props.allDays, date: this.props.date }));
+      teamsGroups.push(
+        new Element(TeamComponent, { teamGroup: teamGroup, allDays: this.props.allDays, date: this.props.date }),
+      );
     });
 
     return new Element("table", { class: "calendarTable" }, [
       new Element("thead", {}, [
         new Element("tr", {}, [
-          new Element("td", { class: "calendarTable__addVocation" }, [new Button({ text: "Add Vacation" })]),
+          new Element("td", { class: "calendarTable__addVocation" }, [new Element(Button, { text: "Add Vacation" })]),
           ...tableHeadCells,
         ]),
       ]),
@@ -41,29 +43,32 @@ class TeamComponent extends Component {
   constructor(props) {
     super(props);
     this.isOpen = true;
-    this.myResult;
   }
-
-  // checkMembersVacation(currDate, membersArr) {
-  //   membersArr.forEach((item) => {
-  //     item.vacations.forEach((item) => {
-  //       let dateStartParts = item.startDate.split(".");
-  //       let convertedDateStart = new Date(`${dateStartParts[2]}, ${dateStartParts[1]}, ${dateStartParts[0]}`);
-  //       let dateEndParts = item.endDate.split(".");
-  //       let convertedDateEnd = new Date(`${dateEndParts[2]}, ${dateEndParts[1]}, ${dateEndParts[0]}`);
-  //       let myResult = currDate >= convertedDateStart && currDate <= convertedDateEnd;
-  //       console.log(myResult);
-  //       return myResult;
-  //     });
-  //   });
-  // }
-
+  checkVacationsDate(vacations, date) {
+    let result = false;
+    vacations.forEach((item) => {
+      const startDateNumbers = item.startDate.split(".");
+      const startDate = `${startDateNumbers[2]}/${startDateNumbers[1]}/${startDateNumbers[0]}`;
+      const endDateNumbers = item.endDate.split(".");
+      const endDate = `${endDateNumbers[2]}/${endDateNumbers[1]}/${endDateNumbers[0]}`;
+      if (date >= new Date(startDate) && date <= new Date(endDate)) {
+        result = true;
+      }
+    });
+    return result;
+  }
+  memberRow(vacations) {
+    return this.props.allDays.map((item) => {
+      return new Element("td", {
+        class: `${item.isDayOff ? "calendarTable__dayOff" : ""} ${
+          this.checkVacationsDate(vacations, item.fullDate) ? "calendarTable__vacations" : ""
+        }`,
+      });
+    });
+  }
   render() {
     const daysCells = this.props.allDays.map((item) => {
-      // let res = this.checkMembersVacation(item.currentCellDate, this.props.teamGroup.members);
-      // console.log(res);
-      let element = new Element("td", { class:`${item.isDayOff ? "calendarTable__dayOff" : ""}`});
-      return element;
+      return new Element("td", { class: item.isDayOff ? "calendarTable__dayOff" : "" });
     });
     const tableRows = [];
     tableRows.push(
@@ -95,7 +100,7 @@ class TeamComponent extends Component {
               {
                 click: () => {
                   this.isOpen = !this.isOpen;
-                  this.mount();
+                  this.update();
                 },
               },
             ),
@@ -109,7 +114,7 @@ class TeamComponent extends Component {
         tableRows.push(
           new Element("tr", {}, [
             new Element("td", {}, [new Element("div", { class: "calendarTable__team-title" }, [], member.name)]),
-            ...daysCells,
+            ...this.memberRow(member.vacations),
           ]),
         ),
       );

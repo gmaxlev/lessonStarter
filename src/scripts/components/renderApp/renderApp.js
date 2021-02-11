@@ -15,11 +15,11 @@ class AppComponent extends Component {
   }
   nextMonth() {
     this.date = new Date(this.date.setMonth(this.date.getMonth() + 1));
-    this.mount();
+    this.update();
   }
   prevMonth() {
     this.date = new Date(this.date.setMonth(this.date.getMonth() - 1));
-    this.mount();
+    this.update();
   }
   fetchCalendar() {
     const departmentTeams = {
@@ -31,7 +31,7 @@ class AppComponent extends Component {
             {
               name: "FE_Team_User1",
               vacations: [
-                { startDate: "20.12.2020", endDate: "22.12.2020", type: "Paid" },
+                { startDate: "20.02.2021", endDate: "22.03.2021", type: "Paid" },
                 { startDate: "20.11.2020", endDate: "22.11.2020", type: "Paid" },
               ],
             },
@@ -77,9 +77,8 @@ class AppComponent extends Component {
       .then((response) => response.json())
       .then((json) => {
         this.teams = json;
-        this.mount();
-      })
-      .catch((error) => alert(error));
+        this.update();
+      });
   }
   getDaysOfActivePeriod() {
     const year = this.date.getFullYear();
@@ -92,7 +91,7 @@ class AppComponent extends Component {
         dayName: item.toLocaleDateString("en-US", { weekday: "long" }),
         date: item.getDate(),
         isDayOff: item.getDay() === 0 || item.getDay() === 6,
-        currentCellDate: item,
+        fullDate: item,
       });
       date.setDate(date.getDate() + 1);
     }
@@ -100,8 +99,8 @@ class AppComponent extends Component {
   }
   render() {
     return new Element("div", { class: "container" }, [
-      new NavigationComponent({ date: this.date, next: this.nextMonth, prev: this.prevMonth }),
-      new TableComponent({ allDays: this.getDaysOfActivePeriod(), teams: this.teams, date: this.date }),
+      new Element(NavigationComponent, { date: this.date, next: this.nextMonth, prev: this.prevMonth }),
+      new Element(TableComponent, { allDays: this.getDaysOfActivePeriod(), teams: this.teams, date: this.date }),
     ]);
   }
 }
@@ -109,7 +108,7 @@ class AppComponent extends Component {
 const renderApp = () => {
   const app = new AppComponent();
   app.setParentSelector(document.getElementById("appRoot"));
-  app.mount();
+  app.update();
 };
 
 export default renderApp;

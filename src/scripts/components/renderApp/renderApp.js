@@ -4,8 +4,8 @@ import TableComponent from "../renderCalendar/renderCalendar";
 import NavigationComponent from "../renderBar/renderBar";
 
 class AppComponent extends Component {
-  constructor(props) {
-    super(props);
+  constructor(properties) {
+    super(properties);
     this.date = new Date();
     this.teams = null;
     this.nextMonth = this.nextMonth.bind(this);
@@ -86,9 +86,9 @@ class AppComponent extends Component {
     const date = new Date(year, month, 1);
     const days = [];
     while (date.getMonth() === month) {
-      let item = new Date(date);
+      const item = new Date(date);
       days.push({
-        dayName: item.toLocaleDateString("en-US", { weekday: "long" }),
+        dayName: item.toLocaleDateString("en-US", { weekday: "short" }),
         date: item.getDate(),
         isDayOff: item.getDay() === 0 || item.getDay() === 6,
         fullDate: item,
@@ -107,7 +107,7 @@ class AppComponent extends Component {
 
 const renderApp = () => {
   const app = new AppComponent();
-  app.setParentSelector(document.getElementById("appRoot"));
+  app.setParentSelector(document.querySelector("#appRoot"));
   app.update();
 };
 

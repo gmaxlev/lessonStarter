@@ -12,9 +12,9 @@
     "plugin:unicorn/recommended",
     "plugin:prettier/recommended",
     "prettier",
-    "prettier/unicorn",
-//    "plugin:@typescript-eslint/recommended",
-//    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    "prettier/unicorn"/*,
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"*/
   ],
   "env": {
     "es6": true,

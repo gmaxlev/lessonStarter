@@ -1,1 +1,1 @@
-export { default as renderApp} from "./renderApp";
+export { default as renderApp } from "./renderApp";

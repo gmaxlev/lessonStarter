@@ -3,8 +3,9 @@ import Component from "../Component";
 import Element from "../Element";
 
 export default class Button extends Component {
-  constructor(props) {
-    super(props);
+  // eslint-disable-next-line no-useless-constructor
+  constructor(properties) {
+    super(properties);
   }
   render() {
     return new Element("button", { class: "button button_a" }, [
